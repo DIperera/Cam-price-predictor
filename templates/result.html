@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - Camera Price Predictor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <i class="fas fa-camera header-icon"></i>
+            <h1>Camera Price Predictor</h1>
+            <p class="subtitle">Prediction Results</p>
+        </header>
+
+        <div class="result-container">
+            {% if error %}
+            <div class="error-box">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h2>Error</h2>
+                <p>{{ error }}</p>
+            </div>
+            {% else %}
+            <div class="success-box">
+                <i class="fas fa-check-circle"></i>
+                <h2>Predicted Price</h2>
+                <div class="price-display">
+                    <span class="currency">Rs</span>
+                    <span class="amount">{{ prediction }}</span>
+                </div>
+                <p class="price-note" style="margin-top: 10px; font-size: 1.1rem; opacity: 1;">($ {{ prediction_usd }} USD)</p>
+                <p class="price-note">Estimated market value based on specifications</p>
+            </div>
+
+            <div class="details-box">
+                <h3><i class="fas fa-info-circle"></i> Camera Specifications</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-trademark"></i> Brand:</span>
+                        <span class="detail-value">{{ camera_details.brand }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-image"></i> Megapixels:</span>
+                        <span class="detail-value">{{ camera_details.megapixels }} MP</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-search-plus"></i> Optical Zoom:</span>
+                        <span class="detail-value">{{ camera_details.zoom_optical }}x</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-expand"></i> Digital Zoom:</span>
+                        <span class="detail-value">{{ camera_details.zoom_digital }}x</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-mobile-alt"></i> Screen Size:</span>
+                        <span class="detail-value">{{ camera_details.screen_size }}"</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-weight"></i> Weight:</span>
+                        <span class="detail-value">{{ camera_details.weight_grams }}g</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-video"></i> Video Resolution:</span>
+                        <span class="detail-value">{{ camera_details.video_resolution }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fas fa-wifi"></i> WiFi:</span>
+                        <span class="detail-value">{{ camera_details.wifi }}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label"><i class="fab fa-bluetooth"></i> Bluetooth:</span>
+                        <span class="detail-value">{{ camera_details.bluetooth }}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="action-buttons">
+                <a href="/" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Make Another Prediction
+                </a>
+            </div>
+        </div>
+
+        <footer>
+            <p>Built with <i class="fas fa-heart"></i> using Flask & Machine Learning</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animate the price on load
+        window.addEventListener('load', function() {
+            const priceElement = document.querySelector('.amount');
+            if (priceElement) {
+                const finalPrice = parseFloat(priceElement.textContent);
+                let currentPrice = 0;
+                const increment = finalPrice / 50;
+                const timer = setInterval(function() {
+                    currentPrice += increment;
+                    if (currentPrice >= finalPrice) {
+                        currentPrice = finalPrice;
+                        clearInterval(timer);
+                    }
+                    priceElement.textContent = currentPrice.toFixed(2);
+                }, 20);
+            }
+        });
+    </script>
+</body>
+</html>
